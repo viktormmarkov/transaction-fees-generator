@@ -1,51 +1,23 @@
 const fs = require('fs');
-const http = require('http');
 const args = process.argv;
 const fileArgument = args.slice(2)[0];
-const CASH_OUT_JURIDICAL_PROVIDER = 'http://private-38e18c-uzduotis.apiary-mock.com/config/cash-out/juridical';
-const CASH_OUT_NATURAL_PROVIDER = 'http://private-38e18c-uzduotis.apiary-mock.com/config/cash-out/natural';
-const CASH_IN_PROVIDER = 'http://private-38e18c-uzduotis.apiary-mock.com/config/cash-out/natural';
+const commissionFeesProvider = require('./commisionFeesProvider');
 
-function wrapHttpRequestInPromise(url) {
-    return new Promise((resolve, reject) => {
-        http.get(url, res => {
-            res.setEncoding('utf8');
-            let rawData = '';
-            res.on('data', (chunk) => {
-                rawData += chunk;
-            });
-            res.on('end', () => {
-                try {
-                    const parsedData = JSON.parse(rawData);
-                    resolve(parsedData)
-                } catch (e) {
-                    reject(e);
-                }
-            });
-        });
-    });
-}
+async function printCommissionFees() {
+    const natural = await commissionFeesProvider.getCashOutNatural();
+    const juridical = await commissionFeesProvider.getCashOutJuridical();
+    const cashin = await commissionFeesProvider.getCashIn();
+    console.log(natural, juridical, cashin);
+};
 
-async function getCashOutJuridicalConfig() {
-    return wrapHttpRequestInPromise(CASH_OUT_JURIDICAL_PROVIDER);
-}
-
-async function getCashOutNaturalConfig() {
-    return wrapHttpRequestInPromise(CASH_OUT_NATURAL_PROVIDER);
-}
-
-async function getCashInConfig() {
-    return wrapHttpRequestInPromise(CASH_IN_PROVIDER);
-}
-
-
-getCashOutJuridicalConfig();
+printCommissionFees();
 
 fs.readFile(fileArgument, 'utf8', (err, data) => {
     if (err) return;
     const transactionData = JSON.parse(data);
 })
 
+// getconfigdata
 // parse data
 // validate data
 // sort the transactions by date
