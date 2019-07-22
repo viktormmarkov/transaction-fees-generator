@@ -35,8 +35,7 @@ describe('commisionFeesProcessor', () => {
         },
       });
 
-      expect(fee)
-        .to.be(0.06);
+      expect(fee).to.be(0.06);
     });
 
     it('should return 0.90$ for cash out, juridical user for 300$ amount', () => {
@@ -49,8 +48,7 @@ describe('commisionFeesProcessor', () => {
         },
       });
 
-      expect(fee)
-        .to.be(0.90);
+      expect(fee).to.be(0.90);
     });
   });
 });
