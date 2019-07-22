@@ -4,7 +4,7 @@ class ComissionFeesProcessor {
     };
 
     validateTransaction(transaction) {
-        return false
+        const {type, user_type: userType, operation: { amount, currency }} = transaction;
     }
 
     generateFee(transaction) {
@@ -12,13 +12,11 @@ class ComissionFeesProcessor {
         if (type === 'cash_in') {
             const { percents, max: { amount: maxAmount, currency: cashInCurrency } } = this.commissionFeesConfig.cashIn;
             if (cashInCurrency === currency) {
-                return Math.max(percents * amount, maxAmount);
+                return Math.min(percents * amount, maxAmount);
             }
         } else if (type === 'cash_out') {
             if (userType === "natural") {
-
             } else if (userType === 'juridical') {
-                
             }
         }
     }
@@ -30,3 +28,5 @@ class ComissionFeesProcessor {
             .value();
     };
 }
+
+module.exports = ComissionFeesProcessor;
