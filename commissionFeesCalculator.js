@@ -77,6 +77,7 @@ class CommissionFeesCalculator {
 
   generateCommissionFees(transactions) {
     return _(transactions)
+      .sortBy(({date}) => new Date(date))
       .filter(transaction => this.validateTransaction(transaction))
       .map(transaction => this.generateFee(transaction))
       .value();

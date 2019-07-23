@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/commissionFeesProcessor.spec.js"
+    "test": "mocha test/commissionFeesCalculator.spec.js"
   },
   "author": "",
   "license": "ISC",
