@@ -5,24 +5,26 @@ const {
   SUPPORTED_CURRENCIES,
 } = require('./transactionSchemaTypesCheck');
 
-class ComissionFeesProcessor {
-  constructor(commissionFeesConfig) {
-    this.commissionFeesConfig = commissionFeesConfig;
+class CommissionFeesCalculator {
+  constructor({ cashIn, cashOutNatural, cashOutJuridical }) {
+    this.cashIn = cashIn;
+    this.cashOutNatural = cashOutNatural;
+    this.cashOutJuridical = cashOutJuridical;
   }
 
-  static isOperationTypeValid(type) {
-    return type && _.contains(VALID_OPERATIONS, type);
+  isOperationTypeValid(type) {
+    return type && _.includes(VALID_OPERATIONS, type);
   }
 
-  static isUserTypeValid(userType) {
-    return userType && _.contains(VALID_USER_TYPES, userType);
+  isUserTypeValid(userType) {
+    return userType && _.includes(VALID_USER_TYPES, userType);
   }
 
-  static isCurrencyValid(currency) {
-    return currency && _.contains(SUPPORTED_CURRENCIES, currency);
+  isCurrencyValid(currency) {
+    return currency && _.includes(SUPPORTED_CURRENCIES, currency);
   }
 
-  static isAmountValid(amount) {
+  isAmountValid(amount) {
     return _.isFinite(amount);
   }
 
@@ -48,10 +50,8 @@ class ComissionFeesProcessor {
     const {
       type,
       user_type: userType,
-      operation: {
-        amount,
-      },
     } = transaction;
+    const {amount} = transaction.operation;
     let commissionAmount = 0;
     if (type === 'cash_in') {
       const {
@@ -59,7 +59,7 @@ class ComissionFeesProcessor {
         max: {
           amount: maxAmount,
         },
-      } = this.commissionFeesConfig.cashIn;
+      } = this.cashIn;
       commissionAmount = Math.min(percents * amount / 100, maxAmount);
     } else if (type === 'cash_out' && userType === 'natural') {
       commissionAmount = 0;
@@ -69,18 +69,18 @@ class ComissionFeesProcessor {
         min: {
           amount: minAmount,
         },
-      } = this.commissionFeesConfig.cashOutJuridical;
+      } = this.cashOutJuridical;
       commissionAmount = Math.max(percents * amount / 100, minAmount);
     }
     return commissionAmount;
   }
 
-  async generateCommissionFees(transactions) {
+  generateCommissionFees(transactions) {
     return _(transactions)
-      .filter(this.validateTransaction)
-      .map(this.generateFee)
+      .filter(transaction => this.validateTransaction(transaction))
+      .map(transaction => this.generateFee(transaction))
       .value();
   }
 }
 
-module.exports = ComissionFeesProcessor;
+module.exports = CommissionFeesCalculator;

@@ -4,8 +4,11 @@ const args = process.argv;
 const fileArgument = args.slice(2)[0];
 
 class InputDataProvider {
-  static async getFileData() {
+  static async getInputData() {
     return new Promise((resolve, reject) => {
+      if (!fileArgument) {
+        reject(new Error('Please pass path to input file as an argument'));
+      }
       fs.readFile(fileArgument, 'utf8', (err, data) => {
         if (err) {
           reject(err);
