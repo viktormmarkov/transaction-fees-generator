@@ -62,6 +62,10 @@ class CommissionFeesCalculator {
     return isOperationTypeValid && isUserTypeValid && isCurrencyValid && isAmountValid;
   }
 
+  calculateCommissionFeeAmount(amount, percent){
+    return amount * percent / 100;
+  }
+
   getCashInCommission({operation: {amount}}) {
     const {
       percents,
@@ -91,9 +95,10 @@ class CommissionFeesCalculator {
     } = this.cashOutNatural;
     const totalWeeklyUserTransaction = this.getWeeklyUserTransaction(userId, date);
     if (totalWeeklyUserTransaction > maxAmount) {
-      return amount * percents / 100;
+      return this.calculateCommissionFeeAmount(amount, percents);
     } else if (totalWeeklyUserTransaction + amount > maxAmount) {
-      return (totalWeeklyUserTransaction + amount - maxAmount) * percents / 100
+      const taxableAmount = totalWeeklyUserTransaction + amount - maxAmount;
+      return this.calculateCommissionFeeAmount(taxableAmount, percents);
     } else {
       return 0;
     }
