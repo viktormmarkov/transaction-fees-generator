@@ -91,9 +91,9 @@ class CommissionFeesCalculator {
     } = this.cashOutNatural;
     const totalWeeklyUserTransaction = this.getWeeklyUserTransaction(userId, date);
     if (totalWeeklyUserTransaction > maxAmount) {
-      return percents * amount / 100;
+        return amount * percents / 100;
     } else if (totalWeeklyUserTransaction + amount > maxAmount) {
-      return Math.abs(maxAmount - totalWeeklyUserTransaction + amount) * percents / 100
+      return (totalWeeklyUserTransaction + amount - maxAmount) * percents / 100
     } else {
       return 0;
     }
