@@ -73,7 +73,8 @@ class CommissionFeesCalculator {
         amount: maxAmount,
       },
     } = this.cashIn;
-    return Math.min(percents * amount / 100, maxAmount);
+    const commission = this.calculateCommissionFeeAmount(amount, percents);
+    return Math.min(commission, maxAmount);
   }
 
   getCashOutJuridicalCommission({operation: {amount}}) {
@@ -83,7 +84,8 @@ class CommissionFeesCalculator {
         amount: minAmount,
       },
     } = this.cashOutJuridical;
-    return Math.max(percents * amount / 100, minAmount);
+    const commission = this.calculateCommissionFeeAmount(amount, percents);
+    return Math.max(commission, minAmount);
   }
 
   getCashOutNaturalCommission({operation: {amount}, user_id: userId, date}) {
