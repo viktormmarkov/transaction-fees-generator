@@ -92,13 +92,25 @@ describe('commisionFeesCalculator', () => {
       });
     });
     it('should sort the transactions by date', () => {
-      const transactionsFees = commisionFeesProcessor.generateCommissionFees([cashOutTransaction, cashInTransaction, ]);
+      const transactionsFees = commisionFeesProcessor.generateCommissionFees([cashOutTransaction, cashInTransaction,]);
       const [firstFee, secondFee] = transactionsFees;
       expect(transactionsFees.length)
         .to.be(2);
       expect(firstFee)
         .to.be(0.06)
       expect(secondFee)
+        .to.be(0.9)
+    });
+    it('should sort the transactions by date', () => {
+      const transactionsFees = commisionFeesProcessor.generateCommissionFees([cashOutTransaction, cashInTransaction, cashOutTransaction, ]);
+      const [firstFee, secondFee, thirdFee] = transactionsFees;
+      expect(transactionsFees.length)
+        .to.be(3);
+      expect(firstFee)
+        .to.be(0.06)
+      expect(secondFee)
+        .to.be(0.9)
+      expect(thirdFee)
         .to.be(0.9)
     });
   });
