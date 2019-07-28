@@ -25,7 +25,7 @@ async function calculateCommissionFees() {
 
     const commissionFees = commissionFeesCalculator.generateCommissionFees(inputData);
 
-    console.log(commissionFees);
+    _.each(commissionFees, cf => console.log(cf));
   } catch (err) {
     console.log(err);
   }
