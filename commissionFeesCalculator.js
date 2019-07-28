@@ -61,8 +61,13 @@ class CommissionFeesCalculator {
     return isOperationTypeValid && isUserTypeValid && isCurrencyValid && isAmountValid;
   }
 
+  roundCents(amount) {
+    return Math.ceil(amount * 100) / 100;
+  }
+
   calculateCommissionFeeAmount(amount, percent) {
-    return amount * percent / 100;
+    const calculatedAmount = amount * percent / 100;
+    return this.roundCents(calculatedAmount);
   }
 
   getCashInCommission({ operation: { amount } }) {

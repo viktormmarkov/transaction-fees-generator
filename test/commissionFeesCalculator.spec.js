@@ -117,7 +117,7 @@ describe('commisionFeesCalculator', () => {
         .to.be(0.9);
     });
 
-    it.only('should skip commission fee for invalid currency', () => {
+    it('should skip commission fee for invalid currency', () => {
       const invalidTransaction = _.cloneDeep(cashInTransaction);
       invalidTransaction.operation.currency = 'USD';
       const transactionsFees = commisionFeesProcessor.generateCommissionFees([invalidTransaction]);
@@ -125,7 +125,7 @@ describe('commisionFeesCalculator', () => {
         .to.be(0);
     });
 
-    it.only('should skip commission fee for invalid amount', () => {
+    it('should skip commission fee for invalid amount', () => {
       const invalidTransaction = _.cloneDeep(cashInTransaction);
       invalidTransaction.operation.amount = 'aa';
       const transactionsFees = commisionFeesProcessor.generateCommissionFees([invalidTransaction]);
@@ -133,7 +133,7 @@ describe('commisionFeesCalculator', () => {
         .to.be(0);
     });
 
-    it.only('should skip commission fee for invalid amount', () => {
+    it('should skip commission fee for invalid amount', () => {
       const invalidTransaction = _.cloneDeep(cashInTransaction);
       invalidTransaction.operation.amount = 'aa';
       const transactionsFees = commisionFeesProcessor.generateCommissionFees([invalidTransaction]);
