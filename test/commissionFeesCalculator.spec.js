@@ -22,7 +22,7 @@ describe('commisionFeesCalculator', () => {
     week_limit: {
       amount: 1000,
       currency: 'EUR',
-    }
+    },
   };
   const cashInTransaction = {
     user_type: 'natural',
@@ -41,7 +41,7 @@ describe('commisionFeesCalculator', () => {
       amount: 300.00,
       currency: 'EUR',
     },
-  }
+  };
   const cashOutNaturalTransaction = {
     user_type: 'natural',
     type: 'cash_out',
@@ -51,14 +51,14 @@ describe('commisionFeesCalculator', () => {
       amount: 30000.00,
       currency: 'EUR',
     },
-  }
+  };
   describe('generateFee', () => {
     let commisionFeesProcessor;
     beforeEach(() => {
       commisionFeesProcessor = new CommissionFeesCalculator({
         cashIn,
         cashOutJuridical,
-        cashOutNatural
+        cashOutNatural,
       });
     });
     it('should return 0.06$ for cash in, natural user for 200$ amount', () => {
@@ -80,7 +80,7 @@ describe('commisionFeesCalculator', () => {
 
       expect(fee)
         .to.be(87);
-    })
+    });
   });
 
   describe('generateCommissionFees', () => {
@@ -92,26 +92,28 @@ describe('commisionFeesCalculator', () => {
       });
     });
     it('should sort the transactions by date', () => {
-      const transactionsFees = commisionFeesProcessor.generateCommissionFees([cashOutTransaction, cashInTransaction,]);
+      const transactions = [cashOutTransaction, cashInTransaction];
+      const transactionsFees = commisionFeesProcessor.generateCommissionFees(transactions);
       const [firstFee, secondFee] = transactionsFees;
       expect(transactionsFees.length)
         .to.be(2);
       expect(firstFee)
-        .to.be(0.06)
+        .to.be(0.06);
       expect(secondFee)
-        .to.be(0.9)
+        .to.be(0.9);
     });
     it('should sort the transactions by date', () => {
-      const transactionsFees = commisionFeesProcessor.generateCommissionFees([cashOutTransaction, cashInTransaction, cashOutTransaction, ]);
+      const transactions = [cashOutTransaction, cashInTransaction, cashOutTransaction];
+      const transactionsFees = commisionFeesProcessor.generateCommissionFees(transactions);
       const [firstFee, secondFee, thirdFee] = transactionsFees;
       expect(transactionsFees.length)
         .to.be(3);
       expect(firstFee)
-        .to.be(0.06)
+        .to.be(0.06);
       expect(secondFee)
-        .to.be(0.9)
+        .to.be(0.9);
       expect(thirdFee)
-        .to.be(0.9)
+        .to.be(0.9);
     });
   });
 });
