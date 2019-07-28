@@ -40,7 +40,7 @@ class CommissionFeesCalculator {
   }
 
   isAmountValid(amount) {
-    return _.isFinite(amount);
+    return _.isFinite(amount) && amount > 0;
   }
 
   validateTransaction(transaction) {
