@@ -15,9 +15,8 @@ function getWeekNumber(date) {
   // good workaround for now
   if (weekday === 0) {
     return week - 1;
-  } else {
-    return week;
   }
+  return week;
 }
 
 class CommissionFeesCalculator {
@@ -62,11 +61,11 @@ class CommissionFeesCalculator {
     return isOperationTypeValid && isUserTypeValid && isCurrencyValid && isAmountValid;
   }
 
-  calculateCommissionFeeAmount(amount, percent){
+  calculateCommissionFeeAmount(amount, percent) {
     return amount * percent / 100;
   }
 
-  getCashInCommission({operation: {amount}}) {
+  getCashInCommission({ operation: { amount } }) {
     const {
       percents,
       max: {
@@ -77,7 +76,7 @@ class CommissionFeesCalculator {
     return Math.min(commission, maxAmount);
   }
 
-  getCashOutJuridicalCommission({operation: {amount}}) {
+  getCashOutJuridicalCommission({ operation: { amount } }) {
     const {
       percents,
       min: {
@@ -88,7 +87,7 @@ class CommissionFeesCalculator {
     return Math.max(commission, minAmount);
   }
 
-  getCashOutNaturalCommission({operation: {amount}, user_id: userId, date}) {
+  getCashOutNaturalCommission({ operation: { amount }, user_id: userId, date }) {
     const {
       percents,
       week_limit: {
@@ -128,7 +127,9 @@ class CommissionFeesCalculator {
 
   getWeeklyUserTransaction(userId, date) {
     const weekNumber = getWeekNumber(date);
-    return (this.userWeeklyTransactions[weekNumber] && this.userWeeklyTransactions[weekNumber][userId]) || 0;
+    const weeklyTransactions = this.userWeeklyTransactions[weekNumber];
+    const userWeeklyTransactions = weeklyTransactions && weeklyTransactions[userId];
+    return userWeeklyTransactions || 0;
   }
 
   updateWeeklyUserTransaction(userId, date, amount) {
@@ -140,11 +141,11 @@ class CommissionFeesCalculator {
       this.userWeeklyTransactions[weekNumber] = {};
       this.userWeeklyTransactions[weekNumber][userId] = amount;
     }
-  } 
+  }
 
   generateCommissionFees(transactions) {
     return _(transactions)
-      .sortBy(({date}) => new Date(date))
+      .sortBy(({ date }) => new Date(date))
       .filter(transaction => this.validateTransaction(transaction))
       .map(transaction => this.generateFee(transaction))
       .value();
