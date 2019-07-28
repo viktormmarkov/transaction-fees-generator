@@ -15,6 +15,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'class-methods-use-this': false
+    'class-methods-use-this': 0,
+    'no-else-return': 0
   },
 };
